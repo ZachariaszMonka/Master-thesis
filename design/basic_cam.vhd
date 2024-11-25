@@ -33,12 +33,11 @@ end basic_cam;
 architecture Behavioral of basic_cam is
     type memory_array is array (0 to 2**ADDR_WIDTH-1) of std_logic_vector(DATA_WIDTH-1 downto 0);
     signal      mem        : memory_array := (others => (others => '0'));
-    signal      o_r_addr   : std_logic_vector(ADDR_WIDTH - 1 downto 0) := (others => '0');
 begin
     
     write_process : process(clk)
     begin
-        if falling_edge(clk) then
+        if rising_edge(clk) then
             if w_en = '1' then
                 mem(to_integer(unsigned(w_addr))) <= w_data;
             end if;
@@ -48,7 +47,7 @@ begin
     read_process : process(clk)
         variable   detected_data : std_logic_vector(2 ** ADDR_WIDTH downto 0) := (others => '0');
     begin
-        if falling_edge(clk) then
+        if rising_edge(clk) then
             for addr in 0 to 2**ADDR_WIDTH - 1 loop
                 if r_data = mem(addr) then
                     detected_data(addr) := '1';
@@ -56,15 +55,12 @@ begin
                     detected_data(addr) := '0';
                 end if;
             end loop;
-           o_r_addr <= (others => '0');
+           r_addr <= (others => '0');
            for addr in 0 to 2**ADDR_WIDTH - 1 loop
               if detected_data(addr) = '1' then
-                  o_r_addr <= std_logic_vector(to_unsigned(addr, o_r_addr'length));
+                  r_addr <= std_logic_vector(to_unsigned(addr, r_addr'length));
               end if;
            end loop;
-        end if;
-        if rising_edge(clk) then
-            r_addr <= o_r_addr;
         end if;
     end process;
 end Behavioral;

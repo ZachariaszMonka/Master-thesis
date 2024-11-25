@@ -20,7 +20,7 @@ use IEEE.NUMERIC_STD.ALL;
 entity basic_cam_bug1_tb is
     generic (
         DATA_WIDTH : integer := 8;
-        ADDR_WIDTH : integer := 6
+        ADDR_WIDTH : integer := 4
     );
 end basic_cam_bug1_tb;
 
@@ -47,7 +47,7 @@ begin
         wait for clk_period/2;
     end process;
     
-    UUT : entity work.basic_cam_bug1
+    UUT : entity work.basic_cam
     generic map(
         DATA_WIDTH => DATA_WIDTH,
         ADDR_WIDTH => ADDR_WIDTH

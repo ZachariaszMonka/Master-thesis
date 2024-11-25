@@ -35,14 +35,14 @@ architecture Behavioral of dual_cam is
     type memory_ram is array (0 to 2**ADDR_WIDTH-1) of std_logic_vector(DATA_WIDTH-1 downto 0);
     signal      mem_cam        : memory_cam := (others => (others => '0'));
     signal      mem_ram        : memory_ram := (others => (others => '0'));
-    signal      o_r_addr       : std_logic_vector(ADDR_WIDTH - 1 downto 0) := (others => '0');
+    
 begin
     
     write_process : process(clk)
         variable    old_cam_data  : std_logic_vector(DATA_WIDTH - 1 downto 0) := (others => '0');
         variable    old_ram_addr  : std_logic_vector(ADDR_WIDTH - 1 downto 0) := (others => '0');
     begin
-        if falling_edge(clk) then
+        if rising_edge(clk) then
             if w_en = '1' then
                 --write new data
                 mem_cam(to_integer(unsigned(w_data))) <= w_addr;
@@ -58,11 +58,8 @@ begin
 
     read_process : process(clk)
     begin
-        if falling_edge(clk) then
-            o_r_addr <= mem_cam(to_integer(unsigned(r_data)));
-        end if;
         if rising_edge(clk) then
-            r_addr <= o_r_addr;
+            r_addr <= mem_cam(to_integer(unsigned(r_data)));
         end if;
     end process;
 end Behavioral;

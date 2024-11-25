@@ -33,12 +33,11 @@ end basic_ram;
 architecture Behavioral of basic_ram is
     type memory_array is array (0 to 2**ADDR_WIDTH-1) of std_logic_vector(DATA_WIDTH-1 downto 0);
     signal mem : memory_array := (others => (others => '0'));
-    signal o_r_data : std_logic_vector(DATA_WIDTH-1 downto 0) := (others => '0') ;
 begin
     
     write_process : process(clk)
     begin
-        if falling_edge(clk) then
+        if rising_edge(clk) then
             if w_en = '1' then
                 mem(to_integer(unsigned(w_addr))) <= w_data;
             end if;
@@ -47,11 +46,8 @@ begin
 
     read_process : process(clk)
     begin
-        if falling_edge(clk) then
-            o_r_data <= mem(to_integer(unsigned(r_addr)));
-        end if;
         if rising_edge(clk) then
-            r_data <= o_r_data;
+            r_data <= mem(to_integer(unsigned(r_addr)));
         end if;
     end process;
 end Behavioral;

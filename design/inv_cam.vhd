@@ -35,12 +35,12 @@ architecture Behavioral of inv_cam is
     signal      mem              : memory_array := (others => (others => '0'));
     attribute   ram_style        : string;
     attribute   ram_style of mem : signal is "distributed";
-    signal      o_r_addr         : std_logic_vector(ADDR_WIDTH - 1 downto 0) := (others => '0');
+    
 begin
     
     write_process : process(clk)
     begin
-        if falling_edge(clk) then
+        if rising_edge(clk) then
             if w_en = '1' then
                 mem(to_integer(unsigned(w_data))) <= w_addr;
             end if;
@@ -49,11 +49,8 @@ begin
 
     read_process : process(clk)
     begin
-        if falling_edge(clk) then
-            o_r_addr <= mem(to_integer(unsigned(r_data)));
-        end if;
         if rising_edge(clk) then
-            r_addr <= o_r_addr;
+            r_addr <= mem(to_integer(unsigned(r_data)));
         end if;
     end process;
 end Behavioral;

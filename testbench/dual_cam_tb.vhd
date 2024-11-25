@@ -39,10 +39,11 @@ begin
 
     clk_generator : process
     begin
-        clk <= '1';
-        wait for clk_period/2;
+        wait for clk_period*9/20;       
         clk <= '0';
         wait for clk_period/2;
+        clk <= '1';
+        wait for clk_period*1/20; 
     end process;
     
     UUT : entity work.dual_cam
